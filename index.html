@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Planes de Internet</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <script>
+
+        let nombreCliente = prompt("Ingrese su nombre:");
+        let tipoPlan = parseInt(prompt("Seleccione el tipo de plan de internet:\n1. Básico (10 Mbps) - $40.000\n2. Estándar (50 Mbps) - $70.000\n3. Premium (100 Mbps) - $100.000"));
+        let mesesContratados = parseInt(prompt("Ingrese el número de meses que desea contratar:"));
+
+        let valorMensual = 0;
+        let nombrePlan = "";
+        let clasePlan = "";
+
+
+        switch (tipoPlan) {
+            case 1:
+                valorMensual = 40000;
+                nombrePlan = "Básico (10 Mbps)";
+                clasePlan = "plan-basico";
+                break;
+            case 2:
+                valorMensual = 70000;
+                nombrePlan = "Estándar (50 Mbps)";
+                clasePlan = "plan-estandar";
+                break;
+            case 3:
+                valorMensual = 100000;
+                nombrePlan = "Premium (100 Mbps)";
+                clasePlan = "plan-premium";
+                break;
+            default:
+                alert("Tipo de plan no válido.");
+                break;
+        }
+
+
+        let subtotal = valorMensual * mesesContratados;
+
+
+        let porcentajeDescuento = 0;
+        if (mesesContratados >= 12) {
+            porcentajeDescuento = 0.20; // 20% de descuento por 12 meses o más
+        } else if (mesesContratados >= 6) {
+            porcentajeDescuento = 0.10; // 10% de descuento por 6 meses o más
+        }
+
+
+        let montoDescuento = subtotal * porcentajeDescuento;
+        let totalPagar = subtotal - montoDescuento;
+
+
+        let formatoMoneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+
+
+        if (valorMensual > 0 && mesesContratados > 0) {
+            document.write(`
+                <div class="card ${clasePlan}">
+                    <h2>Resumen de Contratación</h2>
+                    <p><strong>Cliente:</strong> ${nombreCliente}</p>
+                    <p><strong>Tipo de Plan:</strong> ${nombrePlan}</p>
+                    <p><strong>Valor Mensual:</strong> ${formatoMoneda.format(valorMensual)}</p>
+                    <p><strong>Número de Meses:</strong> ${mesesContratados}</p>
+                    <p><strong>Subtotal:</strong> ${formatoMoneda.format(subtotal)}</p>
+            `);
+
+            if (porcentajeDescuento > 0) {
+                let porcentajeTexto = (porcentajeDescuento * 100) + "%";
+                document.write(`
+                    <p class="descuento-aplicado"><strong>Descuento Aplicado (${porcentajeTexto}):</strong> -${formatoMoneda.format(montoDescuento)}</p>
+                `);
+            } else {
+                document.write(`
+                    <p><strong>Descuento Aplicado:</strong> Ninguno (aplica a partir de 6 meses)</p>
+                `);
+            }
+
+            document.write(`
+                    <hr>
+                    <h3 class="total">Total a Pagar: ${formatoMoneda.format(totalPagar)}</h3>
+                </div>
+            `);
+        } else {
+            document.write('<div class="card"><p>Datos ingresados no válidos. Por favor recargue la página e intente de nuevo.</p></div>');
+        }
+    </script>
+
+</body>
+</html>
